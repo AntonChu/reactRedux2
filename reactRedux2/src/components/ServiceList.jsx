@@ -12,13 +12,12 @@ export default function ServiceList() {
     // const target = evt.target.value;
     // dispatch(searchChange(target));
 
-    const target = evt.target.value;
-    dispatch(searchChange('value', target));
+    console.log(evt.target.value)
+    const g = evt.target.value;
+    dispatch(searchChange('value', g));
   }
 
   const handleFix = (id) => {
-    console.log(items)
-    console.log(id);
     const item = items.find(el => el.id === id);
     dispatch(changeService('name', item.name));
     dispatch(changeService('price', item.price));
