@@ -1,38 +1,39 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeService, fixService, changeService, searchService } from "../redux/actionCreator";
+import {
+  removeService,
+  filterService,
+  changeService,
+  changeEditStatus,
+} from "../redux/actionCreator";
 
 export default function ServiceList() {
   const items = useSelector((state) => state.serviceList);
+  const { filter } = useSelector((state) => state.serviceAdd);
+
   const dispatch = useDispatch();
 
-  const searchChange = (evt) => {
-    // const { value } = evt.target;
-    // dispatch(searchChange(value));
-
-    // const target = evt.target.value;
-    // dispatch(searchChange(target));
-
-    console.log(evt.target.value)
-    const g = evt.target.value;
-    dispatch(searchChange('value', g));
-  }
-
-  const handleFix = (id) => {
-    const item = items.find(el => el.id === id);
-    dispatch(changeService('name', item.name));
-    dispatch(changeService('price', item.price));
-    dispatch(fixService(id));
-  }
+  const handleFix = (key) => {
+    const item = items.find((el) => el.id === key);
+    dispatch(changeService("name", item.name));
+    dispatch(changeService("price", item.price));
+    dispatch(changeEditStatus(item.id));
+  };
 
   const handleRemove = (id) => {
     dispatch(removeService(id));
   };
 
+  const handleFilter = (evt) => {
+    const filter = evt.target.value;
+    dispatch(filterService(filter));
+  };
+
   return (
+    
     <>
-      <input onChange={searchChange} placeholder="search..."></input>
+      <input onChange={handleFilter} placeholder="sort..."></input>
       <ul>
-        {items.map((o) => (
+        {items.filter((o) => o.name.includes(filter)).map((o) => (
           <li key={o.id}>
             {o.name} {o.price}
             <button onClick={() => handleFix(o.id)}>fix</button>{" "}
@@ -41,7 +42,5 @@ export default function ServiceList() {
         ))}
       </ul>
     </>
-    
   );
 }
-  
